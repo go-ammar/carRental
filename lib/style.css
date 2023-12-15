@@ -1,0 +1,109 @@
+body {
+    /* background: linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%); */
+    /* background-color: lightblue; */
+    /* background: linear-gradient(180deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%); */
+    background-image: linear-gradient(180deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+
+    background-attachment: fixed;
+    /* height: 100vh; */
+}
+
+#carouselMain {
+    position: relative;
+    max-height: 550px;
+}
+
+.mainSearchBox {
+    position: absolute;
+    bottom: 10%;
+    z-index: 5;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.mainDiv {
+    font-family: verdana;
+    font-size: 20px;
+    text-align: center;
+}
+
+.navbar-dark {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+}
+
+
+.carousel-item img {
+    height: 100%;
+    max-height: 550px;
+    object-fit: cover;
+}
+
+.card_signup {
+    width: fit-content;
+}
+
+.bg-yellow {
+    background-color: yellow !important;
+}
+
+.bg-grad {
+    background-image: linear-gradient(#d4acfb, #b84fce);
+}
+
+.headingSignup {
+    padding-bottom: 1em;
+}
+
+.card-img-top {
+    width: 7rem;
+    height: 7rem;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.card-body-home {
+    padding-bottom: 1em;
+}
+
+.index-search-btn {
+    align-self: flex-end;
+}
+
+.index-search-div {
+    display: flex;
+}
+
+.full-width-button {
+    width: 100%;
+}
+
+/* Add any additional custom styles here */
+/* Ensure there are no conflicting styles affecting the FAB */
+.fab {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007BFF !important;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    padding: 1.2em;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.fab:hover {
+    background-color: #0056b3 !important;
+}
