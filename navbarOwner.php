@@ -27,7 +27,7 @@ if (isset($_GET['logout'])) {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="navbar-nav ms-auto">
                 <a class="nav-link active" href="index.php">Home</a>
-                <a class="nav-link active" href="#">About Us</a>
+                <a class="nav-link active" href="bookingsListUser.php">Bookings</a>
                 <a class="nav-link active" href="myVehicles.php">Your Vehicles</a>
                 <a class="nav-link active" href="addVehicle.php">Contact Us</a>
                 <a class="nav-link active" href="#">Our Clients</a>

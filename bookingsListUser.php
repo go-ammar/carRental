@@ -46,45 +46,36 @@
         include 'connection.php';
 
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-            // Retrieve available cars
 
 
+        if (isset($_SESSION['userType'])) {
+            if ($_SESSION['userType'] == "User") {
+                $userId = $_SESSION['userId'];
+
+                $sql = "SELECT a.id AS appointmentId, v.*, v.*
+                FROM appointments a
+                INNER JOIN vehiclesTable v ON a.carId = v.id
+                WHERE a.renterId = '$userId'
+                ORDER BY a.startDateTime";
+
+                // SELECT * FROM appointments WHERE renterId =  ORDER BY startDateTime";
+                $result = $conn->query($sql);
+            } else if ($_SESSION['userType'] == "Renter") {
+
+                $userId = $_SESSION['userId'];
+
+                $sql = "SELECT a.id AS appointmentId, v.*
+          FROM appointments a
+          INNER JOIN vehiclesTable v ON a.carId = v.id
+          WHERE v.userId = '$userId'
+          ORDER BY a.startDateTime";
 
 
-            $pickUpTime = $_POST["pickUpDate"] . " " . $_POST["pickUpTime"];
-            $dropOffTime = $_POST["dropOffDate"] . " " . $_POST["dropOffTime"];
-            // $dropOffTime = $_POST["dropOffTime"];
-
-            echo $pickUpTime;
-            echo " ---  ";
-            echo $dropOffTime;
-
-            $sql = "SELECT vt.id, vt.model, vt.make, vt.carName
-FROM vehiclesTable vt
-LEFT JOIN appointments a ON vt.id = a.carId
-WHERE (a.startDateTime IS NULL OR a.startDateTime > '$dropOffTime' OR a.endDateTime < '$pickUpTime')";
-
-            $result = $conn->query($sql);
-            // if ($result->num_rows > 0) {
-            //     // Output the available cars
-            //     while ($row = $result->fetch_assoc()) {
-            //         echo "Car ID: " . $row["id"] . ", Model: " . $row["model"] . ", Make: " . $row["make"] . ", Car Name: " . $row["carName"] . "<br>";
-            //     }
-            // } else {
-            //     echo "No available cars for the specified time range.";
-            // }
-
-        } else if (isset($_GET['carType'])) {
-            $carType = $_GET['carType'];
-
-            $sql = "SELECT * FROM vehiclestable where vehicleType = '$carType'";
-            $result = $conn->query($sql);
-        } else {
-            $sql = "SELECT * FROM vehiclestable";
-            $result = $conn->query($sql);
+                $result = $conn->query($sql);
+            }
         }
+
+
 
 
         if ($result->num_rows > 0) {
@@ -93,7 +84,8 @@ WHERE (a.startDateTime IS NULL OR a.startDateTime > '$dropOffTime' OR a.endDateT
             while ($row = $result->fetch_assoc()) {
                 // Access individual columns of the current row using $row['column_name']
                 $name = $row['carName'];
-                $carId = $row['id'];
+                $carId = $row['appointmentId'];
+                $bookingId = $row["id"];
                 // $image = $row['image'];
 
                 if ($counter % 4 == 0) {
@@ -132,9 +124,9 @@ WHERE (a.startDateTime IS NULL OR a.startDateTime > '$dropOffTime' OR a.endDateT
         ?>
 
         <script>
-            function handleCardClick(carId) {
+            function handleCardClick(bookingId) {
                 // alert('Clicked on ' + cardName);
-                window.location.href = 'vehicleDetails.php?carId=' + encodeURIComponent(carId);
+                window.location.href = 'bookingDetails.php?bookingId=' + encodeURIComponent(bookingId);
             }
         </script>
 

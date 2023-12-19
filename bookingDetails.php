@@ -34,13 +34,19 @@
         include 'navbar.php';
     }
 
-    if (isset($_GET['carId'])) {
-        $carId = $_GET['carId'];
+    if (isset($_GET['bookingId'])) {
+        $bookingId = $_GET['bookingId'];
 
-        $sql = "SELECT * FROM vehiclestable where id = '$carId'";
+        $userId = $_SESSION['userId'];
+
+        $sql = "SELECT a.*, v.*
+        FROM appointments a
+        INNER JOIN vehiclesTable v ON a.carId = v.id
+        WHERE a.id = '$bookingId'
+        ORDER BY a.startDateTime";
+
+        // SELECT * FROM appointments WHERE renterId =  ORDER BY startDateTime";
         $result = $conn->query($sql);
-
-
 
         // echo "<script>console.log('Debug Objects: " . $result . "' );</script>";
         // " car is '$result'";
@@ -54,70 +60,12 @@
         echo "Card name parameter not found.";
     }
 
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-
-        $pickupTime = $_POST["pickUpDate"]  . ' ' . $_POST["pickUpTime"];
-
-
-        $dropOffTime = $_POST["dropOffDate"]  . ' ' . $_POST["dropOffTime"];
-
-
-        $dateTimeObject =  $pickupTime;
-        // DateTime::createFromFormat("Y-m-d H:i", $pickupTime);
-        $dateTimeObjectDrop = $dropOffTime;
-        // DateTime::createFromFormat("Y-m-d H:i", $dropOffTime);
-
-        $proposedStartDateTime = $dateTimeObject;
-        $proposedEndDateTime = $dateTimeObjectDrop;
-        $carId = $_GET['carId'];
-
-
-        // Check for overlapping appointments
-        $sql = "SELECT * FROM appointments
-WHERE carId = '$carId' 
-AND (
-  ('$proposedStartDateTime' BETWEEN startDateTime AND endDateTime)
-  OR ('$proposedEndDateTime' BETWEEN startDateTime AND endDateTime)
-  OR (startDateTime BETWEEN '$proposedStartDateTime' AND '$proposedEndDateTime')
-  OR (endDateTime BETWEEN '$proposedStartDateTime' AND '$proposedEndDateTime')
-)";
-
-        $resultAppointment = $conn->query($sql);
-
-
-        if ($resultAppointment->num_rows > 0) {
-            $rowApp = $result->fetch_assoc();
-            echo "Overlapping appointment exists. Cannot create a new appointment.";
-        } else {
-
-
-            $startTime = new DateTime($dateTimeObject);
-            $endTime = new DateTime($proposedEndDateTime);
-
-            // Calculate the difference in hours
-            $interval = $startTime->diff($endTime);
-            $totalHours = $interval->h + ($interval->i / 60);
-
-            // Calculate the amount based on the total hours and hourly rate
-            $amount = $totalHours * $row['rate'];
-
-
-            $userId = $_SESSION['userId'];
-            $sql = "INSERT INTO appointments (renterId, status, carId, startDateTime, endDateTime, amount)
-            VALUES ('$userId', 'PENDING', '$carId', '$dateTimeObject', '$proposedEndDateTime', '$amount')";
-            $appointmentMade = $conn->query($sql);
-            header("Location: index.php");
-        }
-    }
-
     ?>
 
     <div>
 
 
-        <div class="bg-dark card_signup rounded mx-auto my-5 p-5 ">
+        <div class="bg-dark card_signup mx-auto my-5 p-5 ">
 
             <section>
                 <div class="container">
@@ -178,31 +126,20 @@ AND (
 
                                             <form class="row g-3" action="" method="post">
                                                 <div class="col-md-6">
-                                                    <label for="pickUpDate">Select Pick Up Date:</label>
-                                                    <input type="date" class="form-control" id="pickUpDate" name="pickUpDate" required>
+                                                    <label for="pickUpDate" class="form-label fw-bold">Pick Up Date</label>
+                                                    <p><?php echo $row['startDateTime']; ?></p>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label for="pickUpTime">Select Pick Up Time:</label>
-                                                    <input type="time" class="form-control" id="pickUpTime" name="pickUpTime" required>
+                                                    <label for="pickUpTime" class="form-label fw-bold">Drop off Time</label>
+                                                    <p><?php echo $row['endDateTime']; ?></p>
                                                 </div>
-
-                                                <div class="col-md-6">
-                                                    <label for="dropOffDate">Select Drop Off Date:</label>
-                                                    <input type="date" class="form-control" id="dropOffDate" name="dropOffDate" required>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="dropOffTime">Select Drop Off Time:</label>
-                                                    <input type="time" class="form-control" id="dropOffTime" name="dropOffTime" required>
-                                                </div>
-
 
                                                 <div class="col-12">
                                                     <?php
                                                     if (isset($_SESSION['userType'])) {
-                                                        if ($_SESSION['userType'] == "User") {
-                                                            echo '<button class="btn btn-primary" type="submit">Book Car</button>';
+                                                        if ($_SESSION['userType'] == "Renter") {
+                                                            echo '<button class="btn btn-danger" type="submit">Delete Booking</button>';
                                                         } else {
-
                                                             echo '<p class="text-muted">This vehicle details are read-only.</p>';
                                                         }
                                                     }

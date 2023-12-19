@@ -50,7 +50,7 @@
     <?php include 'navbarOwner.php'; ?>
 
 
-    <div class="bg-dark card_signup mx-auto my-5 p-5 ">
+    <div class="bg-dark card_signup rounded mx-auto my-5 p-5 ">
 
         <section>
             <div class="container">

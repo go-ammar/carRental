@@ -33,7 +33,7 @@
         <?php
         // Assuming you have a database connection established ($conn)
         // Fetch users with userType 0
-        $sql = "SELECT * FROM userinfo WHERE userType = 1";
+        $sql = "SELECT * FROM userinfo WHERE userType = 'User'";
         $result = $conn->query($sql);
 
         // Check if there are users with userType 0
@@ -41,7 +41,7 @@
             echo '<section>';
             echo '    <div class="container">';
             echo '        <div class="col">';
-            echo '            <div class="card card-registration my-5 mx-auto">';
+            echo '            <div class="card card-registration rounded my-5 mx-auto">';
             echo '                <div class="row">';
             echo '                    <div class="col">';
             echo '                        <div class="card-body p-md-5 text-black">';
@@ -70,7 +70,7 @@
             echo '<section>';
             echo '    <div class="container">';
             echo '        <div class="col">';
-            echo '            <div class="card card-registration my-5 mx-auto">';
+            echo '            <div class="card card-registration rounded my-5 mx-auto">';
             echo '                <div class="row">';
             echo '                    <div class="col">';
             echo '                        <div class="card-body p-md-5 text-black">';
@@ -90,7 +90,7 @@
         // Assuming you have a database connection established ($conn)
 
         // Fetch users with userType 0
-        $sql = "SELECT * FROM userinfo WHERE userType = 0";
+        $sql = "SELECT * FROM userinfo WHERE userType = 'Renter'";
         $result = $conn->query($sql);
 
         // Check if there are users with userType 0
@@ -98,7 +98,7 @@
             echo '<section>';
             echo '    <div class="container">';
             echo '        <div class="col">';
-            echo '            <div class="card card-registration my-5 mx-auto">';
+            echo '            <div class="card card-registration rounded my-5 mx-auto">';
             echo '                <div class="row">';
             echo '                    <div class="col">';
             echo '                        <div class="card-body p-md-5 text-black">';
@@ -127,7 +127,7 @@
             echo '<section>';
             echo '    <div class="container">';
             echo '        <div class="col">';
-            echo '            <div class="card card-registration my-5 mx-auto">';
+            echo '            <div class="card card-registration rounded my-5 mx-auto">';
             echo '                <div class="row">';
             echo '                    <div class="col">';
             echo '                        <div class="card-body p-md-5 text-black">';
