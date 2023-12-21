@@ -45,9 +45,9 @@
             $password = $_POST["password"];
 
             if ($_POST['userType'] == "carRenter") {
-                $userType = 0;
+                $userType = "User";
             } else {
-                $userType = 1;
+                $userType = "Renter";
             }
 
             $sql = "INSERT INTO userinfo (fName, lName, email, phoneNumber, city, postCode, password, userType) VALUES ('$fName', '$lName', '$email',

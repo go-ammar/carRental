@@ -151,7 +151,7 @@ AND (
                                                 <p><?php echo $row['carNumber']; ?></p>
                                             </div>
                                             <div class="col-md-3">
-                                                <label for="dailyRate" class="form-label fw-bold">Rate (GBP per Day)</label>
+                                                <label for="dailyRate" class="form-label fw-bold">Rate (GBP per Hour)</label>
                                                 <p><?php echo $row['rate']; ?></p>
                                             </div>
                                             <div class="col-md-3">

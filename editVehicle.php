@@ -139,7 +139,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label for="dailyRate" class="form-label">Rate (GBP per
-                                                Day)</label>
+                                                Hour)</label>
                                             <input type="number" class="form-control" id="dailyRate" name="dailyRate" value="<?php echo $row['rate']; ?>" required>
                                         </div>
                                         <div class="col-md-3">

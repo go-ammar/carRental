@@ -52,6 +52,11 @@ body {
     background-color: yellow !important;
 }
 
+.custom-teal {
+    background-color: #20c997;
+    color: #fff;
+}
+
 .bg-grad {
     background-image: linear-gradient(#d4acfb, #b84fce);
 }
