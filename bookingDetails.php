@@ -60,6 +60,29 @@
         echo "Card name parameter not found.";
     }
 
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (isset($_POST['deleteBooking'])) {
+            // Delete Booking logic
+            $sql = "DELETE FROM appointments WHERE id = '$bookingId'";
+
+            if ($conn->query($sql) === TRUE) {
+                if ($_SESSION['userType'] == "Renter") {
+                    header("Location: bookingListUser.php");
+                } else {
+                    header("Location: bookingListAdmin.php");
+                }
+            } else {
+                echo "Error deleting car: " . $conn->error;
+            }
+
+
+            echo "Delete Booking button pressed!";
+        } elseif (isset($_POST['giveFeedback'])) {
+            // Give Feedback logic
+            echo "Give Feedback button pressed!";
+        }
+    }
+
     ?>
 
     <div>
@@ -137,10 +160,14 @@
                                                 <div class="col-12">
                                                     <?php
                                                     if (isset($_SESSION['userType'])) {
-                                                        if ($_SESSION['userType'] == "Renter") {
-                                                            echo '<button class="btn btn-danger" type="submit">Delete Booking</button>';
+                                                        if ($_SESSION['userType'] == "Renter" || $_SESSION['userType'] == "Admin") {
+                                                            if ($row['status'] == "PENDING") {
+                                                                echo '<button class="btn btn-danger" type="submit" name="deleteBooking">Delete Booking</button>';
+                                                            } else if ($row['status'] == "COMPLETED") {
+                                                                echo '<button class="btn btn-primary" type="submit" name="feedback">Give Feedback</button>';
+                                                            }
                                                         } else {
-                                                            echo '<p class="text-muted">This vehicle details are read-only.</p>';
+                                                            // echo '<p class="text-muted">This vehicle details are read-only.</p>';
                                                         }
                                                     }
                                                     ?>

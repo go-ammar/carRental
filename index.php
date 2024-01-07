@@ -44,16 +44,22 @@
 
     <div id="carouselMain" class="carousel slide" data-bs-ride="carousel">
 
+
+        <?php
+        // Check if $_SESSION['userType'] is not set or is equal to "User"
+        if (!isset($_SESSION['userType']) || $_SESSION['userType'] == "User") {
+        ?>
+
+        <?php
+        }
+        ?>
+
         <section>
             <div class="container mainSearchBox">
                 <div class="col">
                     <div class="card card-registration  mx-auto mx-0">
                         <div class="row">
-
-
                             <div class="col">
-
-
                                 <div class="card-body p-md-5 text-black">
                                     <form class="row g-3" action="vehicleListing.php" method="post">
                                         <div class="col-md-3">
@@ -64,7 +70,6 @@
                                             <label for="pickUpTime">Select Pick Up Time:</label>
                                             <input type="time" class="form-control" id="pickUpTime" name="pickUpTime" required>
                                         </div>
-
                                         <div class="col-md-3">
                                             <label for="dropOffDate">Select Drop Off Date:</label>
                                             <input type="date" class="form-control" id="dropOffDate" name="dropOffDate" required>
@@ -73,24 +78,17 @@
                                             <label for="dropOffTime">Select Drop Off Time:</label>
                                             <input type="time" class="form-control" id="dropOffTime" name="dropOffTime" required>
                                         </div>
-
-
                                         <div class="col-12">
                                             <button class="btn btn-primary" type="submit">Search</button>
                                         </div>
-
-
-
                                     </form>
-
-
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </section>
-
 
         <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
 

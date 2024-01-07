@@ -64,7 +64,12 @@
         WHERE id = '$carId'";
 
             if ($conn->query($sql) === TRUE) {
-                header("Location: myVehicles.php");
+
+                if ($_SESSION['userType'] == "Admin") {
+                    header("Location: vehicleListing.php");
+                } else {
+                    header("Location: myVehicles.php");
+                }
             } else {
                 echo "Error updating car: " . $conn->error;
             }
@@ -72,7 +77,12 @@
             $sql = "DELETE FROM vehiclestable WHERE id = '$carId'";
 
             if ($conn->query($sql) === TRUE) {
-                header("Location: myVehicles.php");
+
+                if ($_SESSION['userType'] == "Admin") {
+                    header("Location: vehicleListing.php");
+                } else {
+                    header("Location: myVehicles.php");
+                }
             } else {
                 echo "Error deleting car: " . $conn->error;
             }
@@ -81,7 +91,15 @@
 
     ?>
 
-    <?php include 'navbarOwner.php'; ?>
+    <?php
+
+    if ($_SESSION['userType'] == "Admin") {
+        include 'navbarAdmin.php';
+    } else {
+        include 'navbarOwner.php';
+    }
+
+    ?>
 
 
     <div class="bg-dark card_signup rounded mx-auto my-5 p-5 ">

@@ -39,47 +39,41 @@
 
 
         <div class="container">
-            <h2 class="text-white text-center py-4">What type of car are you looking for?</h2>
+            <h2 class="text-white text-center py-4">Which car are you looking for?</h2>
+        </div>
+
+        <div class="row mx-4 py-4">
+            <form method="post" class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2 text-center" type="text" name="carName" placeholder="Search by Car Name" required>
+            </form>
         </div>
 
         <?php
         include 'connection.php';
 
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["pickUpDate"])) {
 
             // Retrieve available cars
-
-
-
-
             $pickUpTime = $_POST["pickUpDate"] . " " . $_POST["pickUpTime"];
             $dropOffTime = $_POST["dropOffDate"] . " " . $_POST["dropOffTime"];
             // $dropOffTime = $_POST["dropOffTime"];
-
-            echo $pickUpTime;
-            echo " ---  ";
-            echo $dropOffTime;
-
             $sql = "SELECT vt.id, vt.model, vt.make, vt.carName
 FROM vehiclesTable vt
 LEFT JOIN appointments a ON vt.id = a.carId
 WHERE (a.startDateTime IS NULL OR a.startDateTime > '$dropOffTime' OR a.endDateTime < '$pickUpTime')";
 
             $result = $conn->query($sql);
-            // if ($result->num_rows > 0) {
-            //     // Output the available cars
-            //     while ($row = $result->fetch_assoc()) {
-            //         echo "Car ID: " . $row["id"] . ", Model: " . $row["model"] . ", Make: " . $row["make"] . ", Car Name: " . $row["carName"] . "<br>";
-            //     }
-            // } else {
-            //     echo "No available cars for the specified time range.";
-            // }
-
         } else if (isset($_GET['carType'])) {
             $carType = $_GET['carType'];
 
             $sql = "SELECT * FROM vehiclestable where vehicleType = '$carType'";
+            $result = $conn->query($sql);
+        } else if (isset($_POST["carName"])) {
+            $searchTerm = $_POST["carName"];
+            // Sanitize the input to prevent SQL injection (you can use prepared statements)
+            $searchTerm = mysqli_real_escape_string($conn, $searchTerm);
+            $sql = "SELECT * FROM vehiclesTable WHERE carName LIKE '%$searchTerm%'";
             $result = $conn->query($sql);
         } else {
             $sql = "SELECT * FROM vehiclestable";
@@ -126,19 +120,24 @@ WHERE (a.startDateTime IS NULL OR a.startDateTime > '$dropOffTime' OR a.endDateT
         ?>
 
 
-
         <?php
         include 'footer.php';
         ?>
 
 
-
-
-
         <script>
+            var userType = "<?php echo isset($_SESSION['userType']) ? $_SESSION['userType'] : ''; ?>";
+
             function handleCardClick(carId) {
                 // alert('Clicked on ' + cardName);
-                window.location.href = 'vehicleDetails.php?carId=' + encodeURIComponent(carId);
+
+                if (userType == "User") {
+                    window.location.href = 'vehicleDetails.php?carId=' + encodeURIComponent(carId);
+                } else if (userType == "Admin") {
+                    window.location.href = 'editVehicle.php?carId=' + encodeURIComponent(carId);
+                } else {
+                    window.location.href = 'vehicleDetails.php?carId=' + encodeURIComponent(carId);
+                }
             }
         </script>
 

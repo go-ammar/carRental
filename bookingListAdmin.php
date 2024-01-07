@@ -39,7 +39,7 @@
 
 
         <div class="container">
-            <h2 class="text-white text-center py-4">Your Bookings</h2>
+            <h2 class="text-white text-center py-4">All Bookings</h2>
         </div>
 
         <?php
@@ -49,85 +49,40 @@
 
 
         if (isset($_SESSION['userType'])) {
-            if ($_SESSION['userType'] == "User") {
 
-
-
-                $sqlInProgress = "UPDATE appointments
+            $sqlInProgress = "UPDATE appointments
                   SET status = 'IN_PROGRESS'
                   WHERE status <> 'IN_PROGRESS'
                         AND NOW() BETWEEN startDateTime AND endDateTime";
 
-                if ($conn->query($sqlInProgress) === TRUE) {
-                    // echo "Status updated to IN_PROGRESS successfully\n";
-                } else {
-                    // echo "Error updating status to IN_PROGRESS: " . $conn->error . "\n";
-                }
+            if ($conn->query($sqlInProgress) === TRUE) {
+                // echo "Status updated to IN_PROGRESS successfully\n";
+            } else {
+                // echo "Error updating status to IN_PROGRESS: " . $conn->error . "\n";
+            }
 
-                // Update status to COMPLETED if the current datetime is after endDateTime
-                $sqlCompleted = "UPDATE appointments
+            // Update status to COMPLETED if the current datetime is after endDateTime
+            $sqlCompleted = "UPDATE appointments
                  SET status = 'COMPLETED'
                  WHERE status <> 'COMPLETED'
                        AND NOW() > endDateTime";
 
-                if ($conn->query($sqlCompleted) === TRUE) {
-                    // echo "Status updated to COMPLETED successfully\n";
-                } else {
-                    // echo "Error updating status to COMPLETED: " . $conn->error . "\n";
-                }
+            if ($conn->query($sqlCompleted) === TRUE) {
+                // echo "Status updated to COMPLETED successfully\n";
+            } else {
+                // echo "Error updating status to COMPLETED: " . $conn->error . "\n";
+            }
 
 
-                $userId = $_SESSION['userId'];
+            $userId = $_SESSION['userId'];
 
-                $sql = "SELECT a.id AS appointmentId, v.*
+            $sql = "SELECT a.id AS appointmentId, v.*
                 FROM appointments a
                 INNER JOIN vehiclesTable v ON a.carId = v.id
-                WHERE a.renterId = '$userId'
                 ORDER BY a.startDateTime";
 
-                // SELECT * FROM appointments WHERE renterId =  ORDER BY startDateTime";
-                $result = $conn->query($sql);
-            } else if ($_SESSION['userType'] == "Renter") {
-
-
-
-
-                $sqlInProgress = "UPDATE appointments
-                  SET status = 'IN_PROGRESS'
-                  WHERE status <> 'IN_PROGRESS'
-                        AND NOW() BETWEEN startDateTime AND endDateTime";
-
-                if ($conn->query($sqlInProgress) === TRUE) {
-                    // echo "Status updated to IN_PROGRESS successfully\n";
-                } else {
-                    // echo "Error updating status to IN_PROGRESS: " . $conn->error . "\n";
-                }
-
-                // Update status to COMPLETED if the current datetime is after endDateTime
-                $sqlCompleted = "UPDATE appointments
-                 SET status = 'COMPLETED'
-                 WHERE status <> 'COMPLETED'
-                       AND NOW() > endDateTime";
-
-                if ($conn->query($sqlCompleted) === TRUE) {
-                    // echo "Status updated to COMPLETED successfully\n";
-                } else {
-                    // echo "Error updating status to COMPLETED: " . $conn->error . "\n";
-                }
-
-
-
-                $userId = $_SESSION['userId'];
-
-                $sql = "SELECT a.id AS appointmentId, v.*
-          FROM appointments a
-          INNER JOIN vehiclesTable v ON a.carId = v.id
-          WHERE v.userId = '$userId'
-          ORDER BY a.startDateTime";
-
-
-                $result = $conn->query($sql);
-            }
+            // SELECT * FROM appointments WHERE renterId =  ORDER BY startDateTime";
+            $result = $conn->query($sql);
         }
 
 

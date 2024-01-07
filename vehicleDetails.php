@@ -57,58 +57,61 @@
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-
-        $pickupTime = $_POST["pickUpDate"]  . ' ' . $_POST["pickUpTime"];
-
-
-        $dropOffTime = $_POST["dropOffDate"]  . ' ' . $_POST["dropOffTime"];
+        if (isset($_SESSION['userType'])) {
+            $pickupTime = $_POST["pickUpDate"]  . ' ' . $_POST["pickUpTime"];
 
 
-        $dateTimeObject =  $pickupTime;
-        // DateTime::createFromFormat("Y-m-d H:i", $pickupTime);
-        $dateTimeObjectDrop = $dropOffTime;
-        // DateTime::createFromFormat("Y-m-d H:i", $dropOffTime);
-
-        $proposedStartDateTime = $dateTimeObject;
-        $proposedEndDateTime = $dateTimeObjectDrop;
-        $carId = $_GET['carId'];
+            $dropOffTime = $_POST["dropOffDate"]  . ' ' . $_POST["dropOffTime"];
 
 
-        // Check for overlapping appointments
-        $sql = "SELECT * FROM appointments
-WHERE carId = '$carId' 
-AND (
-  ('$proposedStartDateTime' BETWEEN startDateTime AND endDateTime)
-  OR ('$proposedEndDateTime' BETWEEN startDateTime AND endDateTime)
-  OR (startDateTime BETWEEN '$proposedStartDateTime' AND '$proposedEndDateTime')
-  OR (endDateTime BETWEEN '$proposedStartDateTime' AND '$proposedEndDateTime')
-)";
+            $dateTimeObject =  $pickupTime;
+            // DateTime::createFromFormat("Y-m-d H:i", $pickupTime);
+            $dateTimeObjectDrop = $dropOffTime;
+            // DateTime::createFromFormat("Y-m-d H:i", $dropOffTime);
 
-        $resultAppointment = $conn->query($sql);
+            $proposedStartDateTime = $dateTimeObject;
+            $proposedEndDateTime = $dateTimeObjectDrop;
+            $carId = $_GET['carId'];
 
 
-        if ($resultAppointment->num_rows > 0) {
-            $rowApp = $result->fetch_assoc();
-            echo "Overlapping appointment exists. Cannot create a new appointment.";
+            // Check for overlapping appointments
+            $sql = "SELECT * FROM appointments
+    WHERE carId = '$carId' 
+    AND (
+      ('$proposedStartDateTime' BETWEEN startDateTime AND endDateTime)
+      OR ('$proposedEndDateTime' BETWEEN startDateTime AND endDateTime)
+      OR (startDateTime BETWEEN '$proposedStartDateTime' AND '$proposedEndDateTime')
+      OR (endDateTime BETWEEN '$proposedStartDateTime' AND '$proposedEndDateTime')
+    )";
+
+            $resultAppointment = $conn->query($sql);
+
+
+            if ($resultAppointment->num_rows > 0) {
+                $rowApp = $result->fetch_assoc();
+                echo "Overlapping appointment exists. Cannot create a new appointment.";
+            } else {
+
+
+                $startTime = new DateTime($dateTimeObject);
+                $endTime = new DateTime($proposedEndDateTime);
+
+                // Calculate the difference in hours
+                $interval = $startTime->diff($endTime);
+                $totalHours = $interval->h + ($interval->i / 60);
+
+                // Calculate the amount based on the total hours and hourly rate
+                $amount = $totalHours * $row['rate'];
+
+
+                $userId = $_SESSION['userId'];
+                $sql = "INSERT INTO appointments (renterId, status, carId, startDateTime, endDateTime, amount)
+                VALUES ('$userId', 'PENDING', '$carId', '$dateTimeObject', '$proposedEndDateTime', '$amount')";
+                $appointmentMade = $conn->query($sql);
+                header("Location: index.php");
+            }
         } else {
-
-
-            $startTime = new DateTime($dateTimeObject);
-            $endTime = new DateTime($proposedEndDateTime);
-
-            // Calculate the difference in hours
-            $interval = $startTime->diff($endTime);
-            $totalHours = $interval->h + ($interval->i / 60);
-
-            // Calculate the amount based on the total hours and hourly rate
-            $amount = $totalHours * $row['rate'];
-
-
-            $userId = $_SESSION['userId'];
-            $sql = "INSERT INTO appointments (renterId, status, carId, startDateTime, endDateTime, amount)
-            VALUES ('$userId', 'PENDING', '$carId', '$dateTimeObject', '$proposedEndDateTime', '$amount')";
-            $appointmentMade = $conn->query($sql);
-            header("Location: index.php");
+            header("Location: loginPage.php");
         }
     }
 
@@ -174,45 +177,45 @@ AND (
                                                 <p><?php echo $row['vehicleType']; ?></p>
                                             </div>
 
+                                            <?php
 
+                                            if (isset($_SESSION['userType'])) {
+                                                // Display the form only if 'userType' is set
+                                            ?>
+                                                <form class="row g-3" method="post">
+                                                    <!-- Your form fields go here -->
+                                                    <div class="col-md-6">
+                                                        <label for="pickUpDate">Select Pick Up Date:</label>
+                                                        <input type="date" class="form-control" id="pickUpDate" name="pickUpDate" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="pickUpTime">Select Pick Up Time:</label>
+                                                        <input type="time" class="form-control" id="pickUpTime" name="pickUpTime" required>
+                                                    </div>
 
-                                            <form class="row g-3" action="" method="post">
-                                                <div class="col-md-6">
-                                                    <label for="pickUpDate">Select Pick Up Date:</label>
-                                                    <input type="date" class="form-control" id="pickUpDate" name="pickUpDate" required>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="pickUpTime">Select Pick Up Time:</label>
-                                                    <input type="time" class="form-control" id="pickUpTime" name="pickUpTime" required>
-                                                </div>
+                                                    <div class="col-md-6">
+                                                        <label for="dropOffDate">Select Drop Off Date:</label>
+                                                        <input type="date" class="form-control" id="dropOffDate" name="dropOffDate" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="dropOffTime">Select Drop Off Time:</label>
+                                                        <input type="time" class="form-control" id="dropOffTime" name="dropOffTime" required>
+                                                    </div>
 
-                                                <div class="col-md-6">
-                                                    <label for="dropOffDate">Select Drop Off Date:</label>
-                                                    <input type="date" class="form-control" id="dropOffDate" name="dropOffDate" required>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="dropOffTime">Select Drop Off Time:</label>
-                                                    <input type="time" class="form-control" id="dropOffTime" name="dropOffTime" required>
-                                                </div>
-
-
+                                                    <div class="col-12">
+                                                        <button type="submit" class="btn btn-primary">Book Car</button>
+                                                    </div>
+                                                </form>
+                                            <?php
+                                            } else {
+                                                // Display the login button if 'userType' is not set
+                                            ?>
                                                 <div class="col-12">
-                                                    <?php
-                                                    if (isset($_SESSION['userType'])) {
-                                                        if ($_SESSION['userType'] == "User") {
-                                                            echo '<button class="btn btn-primary" type="submit">Book Car</button>';
-                                                        } else {
-
-                                                            echo '<p class="text-muted">This vehicle details are read-only.</p>';
-                                                        }
-                                                    }
-                                                    ?>
-                                                    <!-- Add a message indicating that the details are read-only -->
+                                                    <button class="btn btn-primary" onclick="location.href='loginPage.php';">Login First</button>
                                                 </div>
-
-
-
-                                            </form>
+                                            <?php
+                                            }
+                                            ?>
 
 
 

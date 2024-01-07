@@ -23,10 +23,12 @@ if (isset($_GET['logout'])) {
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="navbar-nav ms-auto">
-                <a class="nav-link active" href="index.php">Home</a>
-                <a class="nav-link active" href="#">Renters</a>
-                <a class="nav-link active" href="myVehicles.php">Owners</a>
-                <a class="nav-link active" href="addVehicle.php">Vehicle List</a>
+                <a class="nav-link active" href="dashboardAdmin.php">Home</a>
+                <!-- <a class="nav-link active" href="#">Renters</a> -->
+                <!-- <a class="nav-link active" href="myVehicles.php">Owners</a> -->
+                <a class="nav-link active" href="vehicleListing.php">Vehicle List</a>
+                <a class="nav-link active" href="addNewCarMakeAdmin.php">Add Make</a>
+                <a class="nav-link active" href="bookingListAdmin.php">Bookings</a>
                 <a class="nav-link active" href="?logout=true">Sign Out</a>
                 <a class="nav-link active" href="#">Admin</a>
             </div>
