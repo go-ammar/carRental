@@ -98,7 +98,7 @@
 
                 // Calculate the difference in hours
                 $interval = $startTime->diff($endTime);
-                $totalHours = $interval->h + ($interval->i / 60);
+                $totalHours = $interval->days * 24 + $interval->h + ($interval->i / 60);
 
                 // Calculate the amount based on the total hours and hourly rate
                 $amount = $totalHours * $row['rate'];

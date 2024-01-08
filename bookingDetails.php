@@ -72,12 +72,74 @@
                     header("Location: bookingListAdmin.php");
                 }
             } else {
-                echo "Error deleting car: " . $conn->error;
+                echo "Error deleting booking: " . $conn->error;
             }
 
 
-            echo "Delete Booking button pressed!";
-        } elseif (isset($_POST['giveFeedback'])) {
+            // echo "Delete Booking button pressed!";
+        } else if (isset($_POST['editBooking'])) {
+
+
+
+            $pickupTime = $_POST["pickUpDate"]  . ' ' . $_POST["pickUpTime"];
+            $dropOffTime = $_POST["dropOffDate"]  . ' ' . $_POST["dropOffTime"];
+
+
+            $dateTimeObject =  $pickupTime;
+            // DateTime::createFromFormat("Y-m-d H:i", $pickupTime);
+            $dateTimeObjectDrop = $dropOffTime;
+            // DateTime::createFromFormat("Y-m-d H:i", $dropOffTime);
+
+            $proposedStartDateTime = $dateTimeObject;
+            $proposedEndDateTime = $dateTimeObjectDrop;
+            $carId = $row['carId'];
+
+
+            // Check for overlapping appointments
+            $sql = "SELECT * FROM appointments
+    WHERE carId = '$carId' 
+    AND (
+      ('$proposedStartDateTime' BETWEEN startDateTime AND endDateTime)
+      OR ('$proposedEndDateTime' BETWEEN startDateTime AND endDateTime)
+      OR (startDateTime BETWEEN '$proposedStartDateTime' AND '$proposedEndDateTime')
+      OR (endDateTime BETWEEN '$proposedStartDateTime' AND '$proposedEndDateTime')
+    )";
+            $resultAppointment = $conn->query($sql);
+
+            if ($resultAppointment->num_rows > 0) {
+                $rowApp = $result->fetch_assoc();
+                echo '<script>alert("Overlapping appointment exists. Cannot create a new appointment.");</script>';
+            } else {
+
+
+                $startTime = new DateTime($dateTimeObject);
+                $endTime = new DateTime($proposedEndDateTime);
+
+                // Calculate the difference in hours
+                $interval = $startTime->diff($endTime);
+                $totalHours = $interval->days * 24 + $interval->h + ($interval->i / 60);
+
+                // Calculate the amount based on the total hours and hourly rate
+                $amount = $totalHours * $row['rate'];
+
+
+                $sql = "UPDATE appointments 
+                SET startDateTime = '$dateTimeObject', endDateTime = '$proposedEndDateTime', amount = '$amount' 
+                WHERE id = '$bookingId'";
+
+                $result = $conn->query($sql);
+
+                if ($result === TRUE) {
+                    if ($_SESSION['userType'] == "Renter") {
+                        header("Location: bookingListUser.php");
+                    } else {
+                        header("Location: bookingListAdmin.php");
+                    }
+                } else {
+                    echo "Error updating booking: " . $conn->error;
+                }
+            }
+        } else if (isset($_POST['giveFeedback'])) {
             // Give Feedback logic
             echo "Give Feedback button pressed!";
         }
@@ -146,16 +208,52 @@
                                             </div>
 
 
+                                            <?php
+                                            // Assuming you have the dynamic datetime string
+                                            $dynamicDateTimeString = $row['startDateTime'];
+
+                                            // Convert the datetime string to a DateTime object
+                                            $dateTimeObject = new DateTime($dynamicDateTimeString);
+
+                                            // Format the date and time components
+                                            $formattedDate = $dateTimeObject->format("Y-m-d");
+                                            $formattedTime = $dateTimeObject->format("H:i");
+
+
+                                            $dynamicDateTimeStringDropOff = $row['endDateTime'];
+
+                                            // Convert the datetime string to a DateTime object
+                                            $dateTimeObject = new DateTime($dynamicDateTimeStringDropOff);
+
+                                            // Format the date and time components
+                                            $formattedDateDropOff = $dateTimeObject->format("Y-m-d");
+                                            $formattedTimeDropOff = $dateTimeObject->format("H:i");
+
+                                            // HTML form with pre-filled and editable date and time inputs
+                                            ?>
+
 
                                             <form class="row g-3" action="" method="post">
                                                 <div class="col-md-6">
                                                     <label for="pickUpDate" class="form-label fw-bold">Pick Up Date</label>
-                                                    <p><?php echo $row['startDateTime']; ?></p>
+                                                    <input type="date" class="form-control" id="pickUpDate" name="pickUpDate" value="<?php echo $formattedDate; ?>" required>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label for="pickUpTime" class="form-label fw-bold">Drop off Time</label>
-                                                    <p><?php echo $row['endDateTime']; ?></p>
+                                                    <input type="time" class="form-control" id="pickUpTime" name="pickUpTime" value="<?php echo $formattedTime; ?>" required>
                                                 </div>
+
+
+
+                                                <div class="col-md-6">
+                                                    <label for="dropOffDate" class="form-label fw-bold">Select Drop Off Date:</label>
+                                                    <input type="date" class="form-control" id="dropOffDate" name="dropOffDate" value="<?php echo $formattedDateDropOff; ?>" required>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="dropOffTime" class="form-label fw-bold">Select Drop Off Time:</label>
+                                                    <input type="time" class="form-control" id="dropOffTime" name="dropOffTime" value="<?php echo $formattedTimeDropOff; ?>" required>
+                                                </div>
+
 
                                                 <div class="col-12">
                                                     <?php
@@ -163,6 +261,7 @@
                                                         if ($_SESSION['userType'] == "Renter" || $_SESSION['userType'] == "Admin") {
                                                             if ($row['status'] == "PENDING") {
                                                                 echo '<button class="btn btn-danger" type="submit" name="deleteBooking">Delete Booking</button>';
+                                                                echo '<button class="btn btn-primary mx-3" type="submit" name="editBooking">Edit Booking</button>';
                                                             } else if ($row['status'] == "COMPLETED") {
                                                                 echo '<button class="btn btn-primary" type="submit" name="feedback">Give Feedback</button>';
                                                             }
@@ -193,22 +292,17 @@
         </div>
 
 
-
         <?php
         include 'footer.php';
         ?>
 
-
-
-
-
         <script>
-            function handleCardClick(cardName) {
-                alert('Clicked on ' + cardName);
-                window.location.href = 'vehicleDetails.php?cardName=' + encodeURIComponent(cardName);
-                // Add your logic for what happens when a card is clicked
-                // For example, you might redirect to a details page or show more information
-            }
+            // function handleCardClick(cardName) {
+            //     alert('Clicked on ' + cardName);
+            //     window.location.href = 'vehicleDetails.php?cardName=' + encodeURIComponent(cardName);
+            //     // Add your logic for what happens when a card is clicked
+            //     // For example, you might redirect to a details page or show more information
+            // }
 
             document.addEventListener('DOMContentLoaded', function() {
                 // Get references to the pickUpDate, pickUpTime, dropOffDate, and dropOffTime inputs
