@@ -41,14 +41,14 @@
         userinfo.lName AS lName,
         COUNT(DISTINCT appointments.id) AS numberOfBookings,
         COUNT(DISTINCT vehiclestable.id) AS numberOfCars,
-        SUM(appointments.amount) AS totalAmount,
-        AVG(appointments.amount) AS avgAmount,
-        overall_avg.avgAmountAllUsers AS overallAvg
+        COALESCE(SUM(appointments.amount), 0) AS totalAmount,
+        COALESCE(AVG(appointments.amount), 0) AS avgAmount,
+        COALESCE(overall_avg.avgAmountAllUsers, 0) AS overallAvg
     FROM 
-        appointments
-        JOIN vehiclestable ON appointments.carId = vehiclestable.id
-        JOIN userinfo ON vehiclestable.userId = userinfo.id
-        CROSS JOIN (SELECT AVG(amount) AS avgAmountAllUsers FROM appointments) AS overall_avg
+        userinfo
+    LEFT JOIN vehiclestable ON userinfo.id = vehiclestable.userId
+    LEFT JOIN appointments ON vehiclestable.id = appointments.carId
+    CROSS JOIN (SELECT AVG(amount) AS avgAmountAllUsers FROM appointments) AS overall_avg
     WHERE 
         userinfo.userType = 'Renter'
     GROUP BY 
@@ -86,14 +86,14 @@
             // Display the list of users
             while ($row = $result->fetch_assoc()) {
                 echo '                                <tr class ="text-center">';
-                echo '                                    <td  class ="py-3"><a href="userDetails.php?userId=' . $row['id'] . '">' . $row['fName'] . " " . $row['lName'] . '</a></td>';
+                echo '                                    <td  class ="py-3">' . $row['fName'] . " " . $row['lName'] . '</a></td>';
                 echo '                                    <td class ="py-3">' . $row['numberOfCars'] . '</td>'; // Assuming 'numberOfCars' is a field in your database
                 echo '                                    <td class ="py-3">' . $row['numberOfBookings'] . '</td>'; // Assuming 'numberOfCars' is a field in your database
                 echo '                                    <td class="py-3">';
                 echo '                                        <span';
 
                 // Check if avgAmount is greater than overallAvg
-                if ($row['avgAmount'] > $row['overallAvg']) {
+                if ($row['avgAmount'] >= $row['overallAvg']) {
                     echo ' class="custom-teal text-dark rounded-pill py-2 px-3"'; // Add dark text and rounded corners class
                 } elseif ($row['avgAmount'] >= 0.8 * $row['overallAvg']) {
                     echo ' class="bg-warning text-dark rounded-pill py-2 px-3"'; // Add a warning background, dark text, and rounded corners class
@@ -103,7 +103,7 @@
 
                 echo '>' . number_format($row['avgAmount'], 2) . '</span></td>';
                 echo '                                    <td class ="py-3">' . number_format($row['totalAmount'], 2) . '</td>'; // Assuming 'amountEarned' is a field in your database
-                echo '                                    <td class ="py-3"><a href="someAction.php?userId=' . $row['overallAvg'] . '">View Details</a></td>';
+                echo '                                    <td class ="py-3"><a href="userDetails.php?userId=' . $row['id'] . '">View Details</a></td>';
                 echo '                                </tr>';
 
                 // Check if it's not the last row
@@ -131,7 +131,6 @@
             echo '                    <div class="col">';
             echo '                        <div class="card-body p-md-5 text-black">';
             echo '                            <h1 class="headingSignup">Drivers</h1>';
-
             echo 'No Drivers found.';
             echo '                        </div>';
             echo '                    </div>';
@@ -147,7 +146,7 @@
         <?php
         // Assuming you have a database connection established ($conn)
         // Fetch users with userType User
-        $sql = "SELECT * FROM userinfo WHERE userType = 'User'";
+        $sql = "SELECT * FROM userinfo WHERE userType = '0'";
         $result = $conn->query($sql);
 
         // Check if there are users with userType 0
@@ -181,22 +180,22 @@
             echo '</section>';
         } else {
             // No users with userType 0 found
-            echo '<section>';
-            echo '    <div class="container">';
-            echo '        <div class="col">';
-            echo '            <div class="card card-registration rounded my-5 mx-auto">';
-            echo '                <div class="row">';
-            echo '                    <div class="col">';
-            echo '                        <div class="card-body p-md-5 text-black">';
-            echo '                            <h1 class="headingSignup">Renters</h1>';
-            echo 'No renters found.';
-            echo '                        </div>';
-            echo '                    </div>';
-            echo '                </div>';
-            echo '            </div>';
-            echo '        </div>';
-            echo '    </div>';
-            echo '</section>';
+            // echo '<section>';
+            // echo '    <div class="container">';
+            // echo '        <div class="col">';
+            // echo '            <div class="card card-registration rounded my-5 mx-auto">';
+            // echo '                <div class="row">';
+            // echo '                    <div class="col">';
+            // echo '                        <div class="card-body p-md-5 text-black">';
+            // echo '                            <h1 class="headingSignup">Renters</h1>';
+            // echo 'No renters found.';
+            // echo '                        </div>';
+            // echo '                    </div>';
+            // echo '                </div>';
+            // echo '            </div>';
+            // echo '        </div>';
+            // echo '    </div>';
+            // echo '</section>';
         }
         ?>
 

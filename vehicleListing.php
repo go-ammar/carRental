@@ -44,7 +44,8 @@
 
         <div class="row mx-4 py-4">
             <form method="post" class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2 text-center" type="text" name="carName" placeholder="Search by Car Name" required>
+                <input class="form-control mr-sm-2 py-2 text-center" type="text" name="carName" placeholder="Search by Car Name" required>
+                <!-- <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button> -->
             </form>
         </div>
 
