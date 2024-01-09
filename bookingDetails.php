@@ -139,9 +139,13 @@
                     echo "Error updating booking: " . $conn->error;
                 }
             }
-        } else if (isset($_POST['giveFeedback'])) {
+        } else if (isset($_POST['feedback'])) {
             // Give Feedback logic
-            echo "Give Feedback button pressed!";
+
+            $carId = $row['carId'];
+            header("Location: vehicleRating.php?carId=$carId&bookingId=$bookingId");
+
+            // echo "Give Feedback button pressed!";
         }
     }
 
@@ -160,7 +164,7 @@
 
                                 <div class="col">
                                     <div class="card-body p-md-5 text-black">
-                                        <h1 class="headingSignup">Vehicle Details</h1>
+                                        <h1 class="headingSignup">Booking Details</h1>
 
                                         <div class="row g-3">
                                             <div class="col-md-3">
@@ -236,34 +240,78 @@
                                             <form class="row g-3" action="" method="post">
                                                 <div class="col-md-6">
                                                     <label for="pickUpDate" class="form-label fw-bold">Pick Up Date</label>
-                                                    <input type="date" class="form-control" id="pickUpDate" name="pickUpDate" value="<?php echo $formattedDate; ?>" required>
+                                                    <?php
+                                                    if ($row['status'] === "PENDING") {
+                                                    ?>
+                                                        <input type="date" class="form-control" id="pickUpDate" name="pickUpDate" value="<?php echo $formattedDate; ?>" required>
+                                                    <?php
+                                                    } else {
+                                                    ?>
+                                                        <p><?php echo $formattedDate; ?></p>
+                                                    <?php
+                                                    }
+                                                    ?>
+
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label for="pickUpTime" class="form-label fw-bold">Drop off Time</label>
-                                                    <input type="time" class="form-control" id="pickUpTime" name="pickUpTime" value="<?php echo $formattedTime; ?>" required>
+                                                    <label for="pickUpTime" class="form-label fw-bold">Pick Up Time</label>
+                                                    <?php
+                                                    if ($row['status'] === "PENDING") {
+                                                    ?>
+                                                        <input type="time" class="form-control" id="pickUpTime" name="pickUpTime" value="<?php echo $formattedTime; ?>" required>
+                                                    <?php
+                                                    } else {
+                                                    ?>
+                                                        <p><?php echo $formattedTime; ?></p>
+                                                    <?php
+                                                    }
+                                                    ?>
                                                 </div>
 
 
 
                                                 <div class="col-md-6">
-                                                    <label for="dropOffDate" class="form-label fw-bold">Select Drop Off Date:</label>
-                                                    <input type="date" class="form-control" id="dropOffDate" name="dropOffDate" value="<?php echo $formattedDateDropOff; ?>" required>
+                                                    <label for="dropOffDate" class="form-label fw-bold">Drop Off Date:</label>
+                                                    <?php
+                                                    if ($row['status'] === "PENDING") {
+                                                    ?>
+                                                        <input type="date" class="form-control" id="dropOffDate" name="dropOffDate" value="<?php echo $formattedDateDropOff; ?>" required>
+                                                    <?php
+                                                    } else {
+                                                    ?>
+                                                        <p><?php echo $formattedDateDropOff; ?></p>
+                                                    <?php
+                                                    }
+                                                    ?>
                                                 </div>
+
                                                 <div class="col-md-6">
-                                                    <label for="dropOffTime" class="form-label fw-bold">Select Drop Off Time:</label>
-                                                    <input type="time" class="form-control" id="dropOffTime" name="dropOffTime" value="<?php echo $formattedTimeDropOff; ?>" required>
+                                                    <label for="dropOffTime" class="form-label fw-bold">Drop Off Time:</label>
+                                                    <?php
+                                                    if ($row['status'] === "PENDING") {
+                                                    ?>
+                                                        <input type="time" class="form-control" id="dropOffTime" name="dropOffTime" value="<?php echo $formattedTimeDropOff; ?>" required>
+                                                    <?php
+                                                    } else {
+                                                    ?>
+                                                        <p><?php echo $formattedTimeDropOff; ?></p>
+                                                    <?php
+                                                    }
+                                                    ?>
                                                 </div>
 
 
                                                 <div class="col-12">
                                                     <?php
                                                     if (isset($_SESSION['userType'])) {
-                                                        if ($_SESSION['userType'] == "Renter" || $_SESSION['userType'] == "Admin") {
+                                                        if ($_SESSION['userType'] == "Renter" || $_SESSION['userType'] == "Admin" || $_SESSION['userType'] == "User") {
                                                             if ($row['status'] == "PENDING") {
                                                                 echo '<button class="btn btn-danger" type="submit" name="deleteBooking">Delete Booking</button>';
                                                                 echo '<button class="btn btn-primary mx-3" type="submit" name="editBooking">Edit Booking</button>';
-                                                            } else if ($row['status'] == "COMPLETED") {
-                                                                echo '<button class="btn btn-primary" type="submit" name="feedback">Give Feedback</button>';
+                                                            } else if ($row['status'] == "COMPLETED" && $_SESSION['userType'] == "User") {
+                                                                if ($row['feedbackGiven'] == false) {
+                                                                    echo '<button class="btn btn-primary" type="submit" name="feedback">Give Feedback</button>';
+                                                                }
                                                             }
                                                         } else {
                                                             // echo '<p class="text-muted">This vehicle details are read-only.</p>';
@@ -297,13 +345,6 @@
         ?>
 
         <script>
-            // function handleCardClick(cardName) {
-            //     alert('Clicked on ' + cardName);
-            //     window.location.href = 'vehicleDetails.php?cardName=' + encodeURIComponent(cardName);
-            //     // Add your logic for what happens when a card is clicked
-            //     // For example, you might redirect to a details page or show more information
-            // }
-
             document.addEventListener('DOMContentLoaded', function() {
                 // Get references to the pickUpDate, pickUpTime, dropOffDate, and dropOffTime inputs
                 var pickUpDateInput = document.getElementById('pickUpDate');

@@ -9,7 +9,7 @@
     </title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="lib/style.css" rel="stylesheet">
 
 </head>
@@ -59,16 +59,34 @@
             $pickUpTime = $_POST["pickUpDate"] . " " . $_POST["pickUpTime"];
             $dropOffTime = $_POST["dropOffDate"] . " " . $_POST["dropOffTime"];
             // $dropOffTime = $_POST["dropOffTime"];
-            $sql = "SELECT vt.id, vt.model, vt.make, vt.carName
-FROM vehiclesTable vt
-LEFT JOIN appointments a ON vt.id = a.carId
-WHERE (a.startDateTime IS NULL OR a.startDateTime > '$dropOffTime' OR a.endDateTime < '$pickUpTime')";
+            $sql = "SELECT
+            vt.id,
+            vt.model,
+            vt.make,
+            vt.carName,
+            AVG(cf.rating) AS avgRating
+        FROM
+            vehiclesTable vt
+        LEFT JOIN
+            appointments a ON vt.id = a.carId
+        LEFT JOIN
+            carFeedback cf ON vt.id = cf.carId
+        WHERE
+            (a.startDateTime IS NULL OR a.startDateTime > '$dropOffTime' OR a.endDateTime < '$pickUpTime')
+        GROUP BY
+            vt.id, vt.model, vt.make, vt.carName;";
 
             $result = $conn->query($sql);
         } else if (isset($_GET['carType'])) {
             $carType = $_GET['carType'];
 
-            $sql = "SELECT * FROM vehiclestable where vehicleType = '$carType'";
+            $sql = "SELECT
+            v.*,
+            (SELECT AVG(cf.rating) FROM carFeedback cf WHERE cf.carId = v.id) AS avgRating
+        FROM
+            vehiclestable v
+        WHERE
+            v.vehicleType = '$carType'";
             $result = $conn->query($sql);
         } else if (isset($_POST["carName"])) {
             $searchTerm = $_POST["carName"];
@@ -77,7 +95,16 @@ WHERE (a.startDateTime IS NULL OR a.startDateTime > '$dropOffTime' OR a.endDateT
             $sql = "SELECT * FROM vehiclesTable WHERE carName LIKE '%$searchTerm%'";
             $result = $conn->query($sql);
         } else {
-            $sql = "SELECT * FROM vehiclestable";
+
+            $sql = "SELECT
+            v.*, 
+            AVG(cf.rating) AS avgRating
+        FROM
+            vehiclestable v
+        LEFT JOIN
+            carFeedback cf ON v.id = cf.carId
+        GROUP BY
+            v.id;";
             $result = $conn->query($sql);
         }
 
@@ -89,6 +116,7 @@ WHERE (a.startDateTime IS NULL OR a.startDateTime > '$dropOffTime' OR a.endDateT
                 // Access individual columns of the current row using $row['column_name']
                 $name = $row['carName'];
                 $carId = $row['id'];
+                $carRating = $row['avgRating'];
                 // $image = $row['image'];
 
                 if ($counter % 4 == 0) {
@@ -100,7 +128,8 @@ WHERE (a.startDateTime IS NULL OR a.startDateTime > '$dropOffTime' OR a.endDateT
                 echo '<div class="card">';
                 echo '<img src="assets/luxury.png'  . '" class="card-img-top mx-auto" alt="' . $name . '">';
                 echo '<div class="card-body-home">';
-                echo '<h5 class="card-title text-center">' . $name . '</h5>';
+                echo '<h5 class="card-title text-center">' . $name . ' <span class="Simplestar">' . ' &#9733 ' . ' </span>' . round($carRating, 1) . '</h5>';
+
                 echo '</div>';
                 echo '</div>';
                 echo '</div>';

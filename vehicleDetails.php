@@ -108,7 +108,7 @@
                 $sql = "INSERT INTO appointments (renterId, status, carId, startDateTime, endDateTime, amount)
                 VALUES ('$userId', 'PENDING', '$carId', '$dateTimeObject', '$proposedEndDateTime', '$amount')";
                 $appointmentMade = $conn->query($sql);
-                header("Location: index.php");
+                header("Location: terms.php");
             }
         } else {
             header("Location: loginPage.php");

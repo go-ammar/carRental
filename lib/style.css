@@ -112,3 +112,34 @@ input::-webkit-inner-spin-button {
 .fab:hover {
     background-color: #0056b3 !important;
 }
+
+.rating {
+    font-size: 2rem;
+    color: #ffd700;
+    /* Set the default color for filled stars */
+}
+
+.rating .star {
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.Simplestar {
+    font-size: 2rem;
+    color: #ffd700;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 5px;
+    content: '\2605';
+}
+
+.rating .star:before {
+    content: '\2605';
+    /* Unicode character for a solid star */
+}
+
+.rating .star.empty:before {
+    content: '\2606';
+    /* Unicode character for an outlined star */
+}
