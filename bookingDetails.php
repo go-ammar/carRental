@@ -39,11 +39,24 @@
 
         $userId = $_SESSION['userId'];
 
-        $sql = "SELECT a.*, v.*
+
+        if ($_SESSION['userType'] == "User") {
+            $sql = "SELECT a.*, v.*, u.*
+            FROM appointments a
+            INNER JOIN vehiclesTable v ON a.carId = v.id
+            INNER JOIN userinfo u ON v.userId = u.id
+            WHERE a.id = '$bookingId'
+            ORDER BY a.startDateTime;";
+        } else if ($_SESSION['userType'] == "Renter" || $_SESSION['userType'] == "Admin") {
+            $sql = "SELECT a.*, v.*, u.*
         FROM appointments a
         INNER JOIN vehiclesTable v ON a.carId = v.id
+        INNER JOIN userinfo u ON a.renterId = u.id
         WHERE a.id = '$bookingId'
-        ORDER BY a.startDateTime";
+        ORDER BY a.startDateTime;";
+        }
+
+
 
         // SELECT * FROM appointments WHERE renterId =  ORDER BY startDateTime";
         $result = $conn->query($sql);
@@ -146,6 +159,7 @@
             header("Location: vehicleRating.php?carId=$carId&bookingId=$bookingId");
 
             // echo "Give Feedback button pressed!";
+        } else if (isset($_POST['email'])) {
         }
     }
 
@@ -301,10 +315,34 @@
                                                 </div>
 
 
+                                                <div class="col-md-12">
+                                                    <?php
+                                                    if ($_SESSION['userType'] == "User") {
+                                                        echo '<h2>Owner Details</h2>';
+                                                    } else {
+                                                        echo '<h2>Renter Details</h2>';
+                                                    }
+                                                    ?>
+                                                </div>
+
+
+                                                <div class="col-md-6">
+                                                    <label for="firstName" class="form-label fw-bold">Name:</label>
+                                                    <p><?php echo $row['fName']  . ' ' . $row['lName']; ?></p>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label for="phoneNumber" class="form-label fw-bold">Phone Number:</label>
+                                                    <p><?php echo $row['phoneNumber']; ?></p>
+                                                </div>
+
                                                 <div class="col-12">
                                                     <?php
                                                     if (isset($_SESSION['userType'])) {
                                                         if ($_SESSION['userType'] == "Renter" || $_SESSION['userType'] == "Admin" || $_SESSION['userType'] == "User") {
+                                                            if ($_SESSION['userType'] == "User") {
+                                                                echo '<p><b>Contact via email:</b> <a href="mailto:' . $row['email'] . '">' . $row['email'] . '</a></p>';
+                                                            }
                                                             if ($row['status'] == "PENDING") {
                                                                 echo '<button class="btn btn-danger" type="submit" name="deleteBooking">Delete Booking</button>';
                                                                 echo '<button class="btn btn-primary mx-3" type="submit" name="editBooking">Edit Booking</button>';

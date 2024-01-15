@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Integration Example</title>
+    <title>Payment Integration</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <style>
         body {
@@ -25,6 +25,44 @@
 </head>
 
 <body>
+
+
+    <?php
+
+    include 'connection.php';
+    session_start();
+
+
+
+    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+
+
+        // $postData = [
+        //     'totalHours' => $totalHours,
+        //     'amount' => $amount,
+        //     'carId' => $carId,
+        //     'startDateTime' => $dateTimeObject,
+        //     'endDateTime' => $proposedEndDateTime
+        // ];
+
+
+        // $carId = $_POST["carId"];
+        // $startDateTime = $_POST["startDateTime"];
+        // $endDateTime = $_POST["endDateTime"];
+        // $amount = $_POST["amount"];
+
+
+        // $userId = $_SESSION['userId'];
+
+        // $sql = "INSERT INTO appointments (renterId, status, carId, startDateTime, endDateTime, amount)
+        //         VALUES ('$userId', 'PENDING', '$carId', '$startDateTime', '$endDateTime', '$amount')";
+        // $appointmentMade = $conn->query($sql);
+
+        // header("Location: index.php");
+    }
+
+    ?>
+
 
     <div class="container">
         <div class="row justify-content-center">
@@ -47,25 +85,53 @@
 
     <!-- Your custom JavaScript for PayPal integration -->
     <script>
+        const searchParams = new URLSearchParams(window.location.search);
+
+        const amount = parseFloat(searchParams.get('amount'));
+        // const amount = parseFloat(searchParams.get('amount'));
+        console.log(searchParams.get('amount'))
         paypal.Buttons({
             createOrder: function(data, actions) {
                 // Set up the transaction
                 return actions.order.create({
                     purchase_units: [{
                         amount: {
-                            value: '10.00', // Replace with the actual payment amount
+                            value: amount, // Replace with the actual payment amount
                             currency_code: 'USD' // Replace with the currency code
                         }
                     }]
                 });
             },
-            onApprove: function(data, actions) {
+            onApprove: async function(data, actions) {
                 // Capture the funds from the transaction
-                return actions.order.capture().then(function(details) {
-                    // Handle the successful payment
-                    console.log(details);
-                    alert('Payment successful!');
-                });
+                const baseUrl = 'complete-appointment.php';
+
+
+                const searchParams = new URLSearchParams(window.location.search);
+
+                // Retrieve a specific parameter
+                const carId = searchParams.get('carId');
+                const dateTimeObject = searchParams.get('dateTimeObject');
+                const proposedEndDateTime = searchParams.get('proposedEndDateTime');
+                const amount = searchParams.get('amount');
+
+                console.log("car id" + carId);
+                // Define query parameters
+                const queryParams = {
+                    carId: carId,
+                    dateTimeObject: dateTimeObject,
+                    proposedEndDateTime: proposedEndDateTime,
+                    amount: amount
+                    // Add more parameters as needed
+                };
+
+                // Construct the URL with query parameters
+                const urlWithParams = `${baseUrl}?${new URLSearchParams(queryParams).toString()}`;
+
+                // Redirect to the new URL
+                window.location.href = urlWithParams;
+
+
             },
             onError: function(err) {
                 // Handle errors during the transaction

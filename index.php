@@ -163,6 +163,58 @@
         </div>
 
 
+        <!-- How It Works Section -->
+        <section class="bg-dark card_signup rounded mx-auto my-5 p-5">
+            <div class="container card card-registration  mx-auto p-4">
+                <h2 class="text-center">How It Works</h2>
+                <br>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>1. Search & Reserve</h4>
+                        <p>Use our simple search tool to find the perfect car for your needs. Select pick-up and drop-off
+                            dates and times, then hit "Search".</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h4>2. Choose Your Car</h4>
+                        <p>Explore our diverse range of vehicles, including Standard, Luxury, SUVs, and Vans. Click on a
+                            category to view available options.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h4>3. Book & Enjoy</h4>
+                        <p>Complete the reservation process, and you're ready to enjoy your journey. Our team is here to
+                            assist you at every step.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Additional Section - About Us -->
+        <section class="bg-dark card_signup rounded mx-auto my-5 p-5">
+            <div class="container card card-registration mx-auto p-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2>About Our Car Rental Service</h2>
+                        <br>
+                        <p>
+                            Welcome to [Your Company Name], your go-to destination for hassle-free and reliable car rentals.
+                            At [Your Company Name], we pride ourselves on providing top-notch vehicles and excellent service
+                            to make your journeys memorable.
+                        </p>
+                        <p>
+                            Our extensive fleet of cars includes a variety of options to suit your needs, whether you're
+                            looking for a standard car, a luxurious ride, a spacious SUV, or practical vans and coasters.
+                            We offer flexible rental durations, competitive rates, and a seamless booking experience.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <img src="assets/about-us.png" class="img-fluid" alt="About Us Image">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
         <?php
         include 'footer.php';
         ?>

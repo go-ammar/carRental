@@ -16,9 +16,11 @@ if (isset($_GET['logout'])) {
 }
 ?>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid sticky-top">
-        <a class="navbar-brand" href="index.php">Navbar</a>
+        <a class="navbar-brand" href="index.php">
+            <img src="assets/logo-removebg.png" alt="Logo" height="50" class="d-inline-block align-top">
+        </a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -29,9 +31,8 @@ if (isset($_GET['logout'])) {
                 <a class="nav-link active" href="index.php">Home</a>
                 <a class="nav-link active" href="bookingsListUser.php">Bookings</a>
                 <a class="nav-link active" href="myVehicles.php">Your Vehicles</a>
-                <a class="nav-link active" href="addVehicle.php">Contact Us</a>
-                <a class="nav-link active" href="#">Our Clients</a>
-                <a class="nav-link active" href="#">Blogs</a>
+                <a class="nav-link active" href="addVehicle.php">Add Vehicle</a>
+                <a class="nav-link active" href="blogs.php">Blogs</a>
                 <a class="nav-link active" href="?logout=true">Sign Out</a>
                 <a class="nav-link active" href="#">Owner</a>
             </div>

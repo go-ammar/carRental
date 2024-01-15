@@ -2,25 +2,25 @@
      <div class="container">
          <div class="row">
              <div class="col-md-6">
-                 <h5>About AvailableCar</h5>
-                 <p>AvailableCar is a platform that connects car owners with drivers for short-term rentals. Find
+                 <h5>About CarVoyage Rentals</h5>
+                 <p>CarVoyage Rentals is a platform that connects car owners with drivers for short-term rentals. Find
                      the
                      perfect car for your needs.</p>
              </div>
              <div class="col-md-3">
                  <h5>Contact Us</h5>
-                 <p>Email: info@availablecar.com</p>
+                 <p>Email: info@CarVoyageRentals.com</p>
                  <p>Phone: (123) 456-7890</p>
              </div>
              <div class="col-md-3">
                  <h5>Quick Links</h5>
                  <ul class="list-unstyled">
-                     <li><a href="#">Privacy Notice</a></li>
-                     <li><a href="#">Products and Services</a></li>
+                     <li><a href="termandconditions.php">Terms And Conditions</a></li>
+                     <li><a href="privacypolicy.php">Privacy Policy</a></li>
                  </ul>
              </div>
          </div>
          <hr class="mt-4">
-         <p class="text-center mb-0">© 2023 AvailableCar. All rights reserved.</p>
+         <p class="text-center mb-0">© 2023 CarVoyage Rentals. All rights reserved.</p>
      </div>
  </footer>

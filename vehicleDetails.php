@@ -104,11 +104,20 @@
                 $amount = $totalHours * $row['rate'];
 
 
-                $userId = $_SESSION['userId'];
+                // $userId = $_SESSION['userId'];
                 $sql = "INSERT INTO appointments (renterId, status, carId, startDateTime, endDateTime, amount)
                 VALUES ('$userId', 'PENDING', '$carId', '$dateTimeObject', '$proposedEndDateTime', '$amount')";
                 $appointmentMade = $conn->query($sql);
-                header("Location: terms.php");
+
+
+                $param1 = 'value1';
+                $param2 = 'value2';
+
+                // Construct the URL with query parameters
+                $nextScreenUrl = 'terms.php?carId=' . urlencode($carId) . '&dateTimeObject=' . urlencode($dateTimeObject)
+                    . '&proposedEndDateTime=' . urldecode($proposedEndDateTime) . '&amount=' . urlencode($amount);
+
+                header("Location: $nextScreenUrl");
             }
         } else {
             header("Location: loginPage.php");
@@ -203,6 +212,7 @@
                                                     </div>
 
                                                     <div class="col-12">
+                                                        <!-- <div id="paypal-button-container"></div> -->
                                                         <button type="submit" class="btn btn-primary">Book Car</button>
                                                     </div>
                                                 </form>
@@ -238,6 +248,7 @@
         ?>
 
 
+        <!-- <script src="https://www.paypal.com/sdk/js?client-id=AcbE5AUFX3oO0svUNmmL4lhhoAao9Gu94UI6RJgP3BF32z9Vaec_o7tV8_LOmqcIiJ2hGDMHm9MOrLmf"></script> -->
 
 
 
@@ -289,6 +300,30 @@
                     }
                 }
             });
+
+
+            // paypal.Buttons({
+            //     createOrder: function(data, actions) {
+            //         // Set up the transaction
+            //         return actions.order.create({
+            //             purchase_units: [{
+            //                 amount: {
+            //                     value: '10.00', // Replace with the actual payment amount
+            //                     currency_code: 'USD' // Replace with the currency code
+            //                 }
+            //             }]
+            //         });
+            //     },
+            //     onApprove: async function(data, actions) {
+            //         // Capture the funds from the transaction
+
+            //     },
+            //     onError: function(err) {
+            //         // Handle errors during the transaction
+            //         console.error(err);
+            //         alert('Error during payment. Please try again.');
+            //     }
+            // }).render('#paypal-button-container');
         </script>
 
 

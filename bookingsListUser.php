@@ -87,6 +87,46 @@
 
                 // SELECT * FROM appointments WHERE renterId =  ORDER BY startDateTime";
                 $result = $conn->query($sql);
+
+
+
+                if ($result->num_rows > 0) {
+
+                    $counter = 0;
+                    while ($row = $result->fetch_assoc()) {
+                        // Access individual columns of the current row using $row['column_name']
+                        $name = $row['carName'];
+                        $carId = $row['appointmentId'];
+                        $bookingId = $row["id"];
+                        // $image = $row['image'];
+
+                        if ($counter % 4 == 0) {
+                            // Start a new row after every 4 cars
+                            echo '<div class="row mx-4 py-4">';
+                        }
+
+                        echo '<div class="col-md-3" onclick="handleCardClick(\'' . $carId . '\')">';
+                        echo '<div class="card">';
+                        echo '<img src="assets/luxury.png'  . '" class="card-img-top mx-auto" alt="' . $name . '">';
+                        echo '<div class="card-body-home">';
+                        echo '<h5 class="card-title text-center">' . $name . '</h5>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+
+                        $counter++;
+
+                        if ($counter % 4 == 0) {
+                            // Close the row after every 4 cars
+                            echo '</div>';
+                        }
+                    }
+                    if ($counter % 4 !== 0) {
+                        echo '</div>';
+                    }
+                } else {
+                    echo "0 results";
+                }
             } else if ($_SESSION['userType'] == "Renter") {
 
 
@@ -127,49 +167,51 @@
 
 
                 $result = $conn->query($sql);
+
+
+
+                if ($result->num_rows > 0) {
+
+                    $counter = 0;
+                    while ($row = $result->fetch_assoc()) {
+                        // Access individual columns of the current row using $row['column_name']
+                        $name = $row['carName'];
+                        $carId = $row['appointmentId'];
+                        $bookingId = $row["id"];
+                        // $image = $row['image'];
+
+                        if ($counter % 4 == 0) {
+                            // Start a new row after every 4 cars
+                            echo '<div class="row mx-4 py-4">';
+                        }
+
+                        echo '<div class="col-md-3" onclick="handleCardClick(\'' . $carId . '\')">';
+                        echo '<div class="card">';
+                        echo '<img src="assets/luxury.png'  . '" class="card-img-top mx-auto" alt="' . $name . '">';
+                        echo '<div class="card-body-home">';
+                        echo '<h5 class="card-title text-center">' . $name . '</h5>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+
+                        $counter++;
+
+                        if ($counter % 4 == 0) {
+                            // Close the row after every 4 cars
+                            echo '</div>';
+                        }
+                    }
+                    if ($counter % 4 !== 0) {
+                        echo '</div>';
+                    }
+                } else {
+                    echo "0 results";
+                }
             }
         }
 
 
 
-
-        if ($result->num_rows > 0) {
-
-            $counter = 0;
-            while ($row = $result->fetch_assoc()) {
-                // Access individual columns of the current row using $row['column_name']
-                $name = $row['carName'];
-                $carId = $row['appointmentId'];
-                $bookingId = $row["id"];
-                // $image = $row['image'];
-
-                if ($counter % 4 == 0) {
-                    // Start a new row after every 4 cars
-                    echo '<div class="row mx-4 py-4">';
-                }
-
-                echo '<div class="col-md-3" onclick="handleCardClick(\'' . $carId . '\')">';
-                echo '<div class="card">';
-                echo '<img src="assets/luxury.png'  . '" class="card-img-top mx-auto" alt="' . $name . '">';
-                echo '<div class="card-body-home">';
-                echo '<h5 class="card-title text-center">' . $name . '</h5>';
-                echo '</div>';
-                echo '</div>';
-                echo '</div>';
-
-                $counter++;
-
-                if ($counter % 4 == 0) {
-                    // Close the row after every 4 cars
-                    echo '</div>';
-                }
-            }
-            if ($counter % 4 !== 0) {
-                echo '</div>';
-            }
-        } else {
-            echo "0 results";
-        }
         ?>
 
 
