@@ -56,7 +56,8 @@
             } else if ($row['userType'] == "User") {
                 header("Location: index.php");
             } else if ($row['userType'] == "Renter") {
-                header("Location: DashboardRenter.php");
+                header("Location: index.php");
+                // header("Location: DashboardRenter.php");
             }
             exit();
         } else {

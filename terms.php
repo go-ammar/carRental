@@ -32,35 +32,6 @@
     include 'connection.php';
     session_start();
 
-
-
-    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-
-
-        // $postData = [
-        //     'totalHours' => $totalHours,
-        //     'amount' => $amount,
-        //     'carId' => $carId,
-        //     'startDateTime' => $dateTimeObject,
-        //     'endDateTime' => $proposedEndDateTime
-        // ];
-
-
-        // $carId = $_POST["carId"];
-        // $startDateTime = $_POST["startDateTime"];
-        // $endDateTime = $_POST["endDateTime"];
-        // $amount = $_POST["amount"];
-
-
-        // $userId = $_SESSION['userId'];
-
-        // $sql = "INSERT INTO appointments (renterId, status, carId, startDateTime, endDateTime, amount)
-        //         VALUES ('$userId', 'PENDING', '$carId', '$startDateTime', '$endDateTime', '$amount')";
-        // $appointmentMade = $conn->query($sql);
-
-        // header("Location: index.php");
-    }
-
     ?>
 
 

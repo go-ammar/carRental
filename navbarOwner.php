@@ -31,6 +31,7 @@ if (isset($_GET['logout'])) {
                 <a class="nav-link active" href="index.php">Home</a>
                 <a class="nav-link active" href="bookingsListUser.php">Bookings</a>
                 <a class="nav-link active" href="myVehicles.php">Your Vehicles</a>
+                <a class="nav-link active" href="carRatingsList.php">Your Ratings</a>
                 <a class="nav-link active" href="addVehicle.php">Add Vehicle</a>
                 <a class="nav-link active" href="blogs.php">Blogs</a>
                 <a class="nav-link active" href="?logout=true">Sign Out</a>
