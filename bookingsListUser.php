@@ -51,8 +51,6 @@
         if (isset($_SESSION['userType'])) {
             if ($_SESSION['userType'] == "User") {
 
-
-
                 $sqlInProgress = "UPDATE appointments
                   SET status = 'IN_PROGRESS'
                   WHERE status <> 'IN_PROGRESS'

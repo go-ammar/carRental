@@ -24,6 +24,19 @@
 
     include 'navbarAdmin.php';
 
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+
+        $userId = $_POST["id"];
+        $sql = "DELETE FROM userinfo WHERE id = '$userId'";
+
+        if ($conn->query($sql) === TRUE) {
+            header("Location: dashboardAdmin.php");
+        } else {
+            echo "Error deleting booking: " . $conn->error;
+        }
+    }
+
     ?>
 
 
@@ -65,7 +78,7 @@
             echo '            <div class="col">';
             echo '                <div class="card my-5">';
             echo '                    <div class="card-body p-md-5">';
-            echo '                        <h1 class="headingSignup">Drivers</h1>';
+            echo '                        <h1 class="headingSignup">Car Owners</h1>';
             echo '                        <div class="table-responsive">';
             echo '                            <table class="table table-hover">';
             echo '                                <thead>';
@@ -146,31 +159,46 @@
         <?php
         // Assuming you have a database connection established ($conn)
         // Fetch users with userType User
-        $sql = "SELECT * FROM userinfo WHERE userType = '0'";
+        $sql = "SELECT * FROM userinfo WHERE userType = 'User'";
         $result = $conn->query($sql);
 
         // Check if there are users with userType 0
         if ($result->num_rows > 0) {
             echo '<section>';
             echo '    <div class="container">';
-            echo '        <div class="col">';
-            echo '            <div class="card card-registration rounded my-5 mx-auto">';
-            echo '                <div class="row">';
-            echo '                    <div class="col">';
-            echo '                        <div class="card-body p-md-5 text-black">';
-            echo '                            <h1 class="headingSignup">Renters</h1>';
+            echo '        <div class="row">';
+            echo '            <div class="col">';
+            echo '                <div class="card my-5">';
+            echo '                    <div class="card-body p-md-5">';
+            echo '                        <h1 class="headingSignup">Drivers</h1>';
+            echo '                        <div class="table-responsive">';
+            echo '                            <table class="table table-hover">';
+            echo '                                <thead>';
+            echo '                                    <tr class ="">';
+            echo '                                        <th>Name</th>';
+            echo '                                        <th>Action</th>';
+            echo '                                    </tr>';
+            echo '                                </thead>';
+            echo '                                <tbody>';
 
-            // Display a form to filter users (if needed)
+            $rowCount = 0;
+            $totalRows = $result->num_rows;
 
             // Display the list of users
-            echo '                            <ul>';
             while ($row = $result->fetch_assoc()) {
-                echo '                                <li>';
-                echo '                                    <a href="userDetails.php?userId=' . $row['id'] . '">' . $row['lName'] . '</a>';
-                echo '                                </li>';
+                echo '                                <tr class ="">';
+                echo '                                    <td  class ="py-3">' . $row['fName'] . " " . $row['lName'] . '</a></td>';
+                echo '                                    <td class ="py-3">';
+                echo '        <form method="post" >';
+                echo '            <input type="hidden" name="id" value="' . $row['id'] . '">';
+                echo '            <button class = "btn btn-link" type="submit" onclick="return confirm(\'Are you sure you want to delete?\')">Delete</button>';
+                echo '        </form>';
+                echo '</td>'; // Assuming 'numberOfCars' is a field in your database
+                echo '                                </tr>';
             }
-            echo '                            </ul>';
 
+            echo '                                </tbody>';
+            echo '                            </table>';
             echo '                        </div>';
             echo '                    </div>';
             echo '                </div>';

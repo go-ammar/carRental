@@ -27,33 +27,31 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $email = $_POST["email"];
-
         $sql = "SELECT * FROM userinfo WHERE email = '$email'";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             echo '<script>alert("This email is already registered. Please use a different email:");</script>';
-
-            // echo "This email is already registered. Please use a different email. '$email'";
+        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo '<script>alert("Invalid email format. Please enter a valid email address.");</script>';
+        } elseif (strlen($password) < 6 || !preg_match('/[0-9]/', $password)) {
+            echo '<script>alert("Password must be at least 6 characters long and contain at least one number.");</script>';
         } else if ($_POST["password"] == $_POST["confirmpassword"]) {
-
             $fName = $_POST["fName"];
             $lName = $_POST["lName"];
             $phoneNumber = $_POST["phoneNumber"];
             $city = $_POST["city"];
             $postCode = $_POST["postCode"];
-            $password = $_POST["password"];
-
+            $password = $_POST['password'];
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             if ($_POST['userType'] == "carRenter") {
                 $userType = "User";
             } else {
                 $userType = "Renter";
             }
-
             $sql = "INSERT INTO userinfo (fName, lName, email, phoneNumber, city, postCode, password, userType) VALUES ('$fName', '$lName', '$email',
-        '$phoneNumber','$city', '$postCode','$password', '$userType')";
+        '$phoneNumber','$city', '$postCode','$hashed_password', '$userType')";
             $conn->query($sql);
-
             header("Location: loginPage.php");
         } else {
             echo '<script>alert("Passwords are not the same.");</script>';
@@ -134,9 +132,20 @@
                                                 Password</label>
                                             <input type="password" class="form-control" id="confirmPwd" name="confirmpassword" value="" required>
                                         </div>
+                                        <div class="col-md-12">
+                                            <label class="form-label">Do you agree to the <a href="termandconditions.php">Terms and Conditions</a></label>
 
+                                            <div class="form-check">
+                                                <label class="form-check-label" for="yes">
+                                                    Yes
+                                                </label>
+                                                <input class="form-check-input" type="radio" id="yes" name="agree" value="yes" required>
+                                            </div>
+
+
+                                        </div>
                                         <div class="col-12">
-                                            <button class="btn btn-primary" type="submit">Submit form</button>
+                                            <button class="btn btn-primary" type="submit">Register</button>
                                         </div>
                                     </form>
 

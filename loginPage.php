@@ -23,16 +23,6 @@
 
     session_start();
 
-    // $userId = $_GET['id']; // Assuming you are passing the user ID through the URL
-
-    // $sql = "SELECT * FROM vehiclestable WHERE id = 3";
-    // $result = $conn->query($sql);
-
-    // if ($result->num_rows > 0) {
-    //     $row = $result->fetch_assoc();
-    // } else {
-    //     echo "0 results";
-    // }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -40,29 +30,55 @@
         $password = $_POST["pwd"];
         $email = $_POST["email"];
 
-
-        $sql = "SELECT * FROM userinfo WHERE password = '$password' and email = '$email'";
+        $sql = "SELECT * FROM userinfo WHERE email = '$email'";
         $result = $conn->query($sql);
-        $conn->query($sql);
-
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            $_SESSION['userType'] = $row['userType'];
-            $_SESSION['userId'] = $row['id'];
 
-            if ($row['userType'] == "Admin") {
-                header("Location: dashboardAdmin.php");
-            } else if ($row['userType'] == "User") {
-                header("Location: index.php");
-            } else if ($row['userType'] == "Renter") {
-                header("Location: index.php");
-                // header("Location: DashboardRenter.php");
+            // Verify password
+            if (password_verify($password, $row['password'])) {
+                $_SESSION['userType'] = $row['userType'];
+                $_SESSION['userId'] = $row['id'];
+
+                if ($row['userType'] == "Admin") {
+                    header("Location: dashboardAdmin.php");
+                } else if ($row['userType'] == "User") {
+                    header("Location: index.php");
+                } else if ($row['userType'] == "Renter") {
+                    header("Location: index.php");
+                    // header("Location: DashboardRenter.php");
+                }
+            } else {
+                echo '<script>alert("Invalid password");</script>';
             }
-            exit();
         } else {
-            echo "Invalid password";
+            echo '<script>alert("User not found");</script>';
         }
+
+        // $sql = "SELECT * FROM userinfo WHERE password = '$password' and email = '$email'";
+        // $result = $conn->query($sql);
+
+
+        // if ($result->num_rows > 0) {
+        //     $row = $result->fetch_assoc();
+        //     $_SESSION['userType'] = $row['userType'];
+        //     $_SESSION['userId'] = $row['id'];
+
+        //     if ($row['userType'] == "Admin") {
+        //         header("Location: dashboardAdmin.php");
+        //     } else if ($row['userType'] == "User") {
+        //         header("Location: index.php");
+        //     } else if ($row['userType'] == "Renter") {
+        //         header("Location: index.php");
+        //         // header("Location: DashboardRenter.php");
+        //     }
+        //     exit();
+        // } else {
+        //     echo '<script>alert("Invalid email or password");</script>';
+
+        //     // echo "Invalid email or password";
+        // }
     }
 
     ?>

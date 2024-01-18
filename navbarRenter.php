@@ -9,9 +9,7 @@ if (isset($_GET['logout'])) {
     unset($_SESSION['userType']);
     unset($_SESSION['userId']);
 
-    // Alternatively, if you want to destroy the entire session, use:
-    // session_destroy();
-    // Redirect to the login page or another appropriate page
+
     header('Location: index.php');
 }
 ?>
@@ -29,11 +27,10 @@ if (isset($_GET['logout'])) {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="navbar-nav ms-auto">
                 <a class="nav-link active" href="index.php">Home</a>
-                <a class="nav-link active" href="#">About Us</a>
                 <a class="nav-link active" href="vehicleListing.php">Vehicles</a>
                 <a class="nav-link active" href="bookingsListUser.php">Bookings</a>
-                <a class="nav-link active" href="#">Our Clients</a>
-                <a class="nav-link active" href="#">Blogs</a>
+                <a class="nav-link active" href="ourClients.php">Our Clients</a>
+                <a class="nav-link active" href="blogs.php">Blogs</a>
                 <a class="nav-link active" href="?logout=true">Sign Out</a>
                 <a class="nav-link active" href="#">User</a>
             </div>

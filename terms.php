@@ -57,9 +57,7 @@
     <!-- Your custom JavaScript for PayPal integration -->
     <script>
         const searchParams = new URLSearchParams(window.location.search);
-
         const amount = parseFloat(searchParams.get('amount'));
-        // const amount = parseFloat(searchParams.get('amount'));
         console.log(searchParams.get('amount'))
         paypal.Buttons({
             createOrder: function(data, actions) {
@@ -67,8 +65,8 @@
                 return actions.order.create({
                     purchase_units: [{
                         amount: {
-                            value: amount, // Replace with the actual payment amount
-                            currency_code: 'USD' // Replace with the currency code
+                            value: amount,
+                            currency_code: 'USD'
                         }
                     }]
                 });
@@ -85,24 +83,16 @@
                 const dateTimeObject = searchParams.get('dateTimeObject');
                 const proposedEndDateTime = searchParams.get('proposedEndDateTime');
                 const amount = searchParams.get('amount');
-
-                console.log("car id" + carId);
-                // Define query parameters
                 const queryParams = {
                     carId: carId,
                     dateTimeObject: dateTimeObject,
                     proposedEndDateTime: proposedEndDateTime,
                     amount: amount
-                    // Add more parameters as needed
                 };
 
                 // Construct the URL with query parameters
                 const urlWithParams = `${baseUrl}?${new URLSearchParams(queryParams).toString()}`;
-
-                // Redirect to the new URL
                 window.location.href = urlWithParams;
-
-
             },
             onError: function(err) {
                 // Handle errors during the transaction

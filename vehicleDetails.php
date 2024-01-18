@@ -40,14 +40,10 @@
         $sql = "SELECT * FROM vehiclestable where id = '$carId'";
         $result = $conn->query($sql);
 
-
-
-        // echo "<script>console.log('Debug Objects: " . $result . "' );</script>";
-        // " car is '$result'";
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
         } else {
-            echo "0 results";
+            echo '<script>alert("Something went Wrong! Please try again.");</script>';
         }
     } else {
         // Handle the case when cardName parameter is not provided
@@ -59,42 +55,29 @@
 
         if (isset($_SESSION['userType'])) {
             $pickupTime = $_POST["pickUpDate"]  . ' ' . $_POST["pickUpTime"];
-
-
             $dropOffTime = $_POST["dropOffDate"]  . ' ' . $_POST["dropOffTime"];
-
-
             $dateTimeObject =  $pickupTime;
-            // DateTime::createFromFormat("Y-m-d H:i", $pickupTime);
             $dateTimeObjectDrop = $dropOffTime;
-            // DateTime::createFromFormat("Y-m-d H:i", $dropOffTime);
-
-            $proposedStartDateTime = $dateTimeObject;
-            $proposedEndDateTime = $dateTimeObjectDrop;
             $carId = $_GET['carId'];
-
-
             // Check for overlapping appointments
             $sql = "SELECT * FROM appointments
     WHERE carId = '$carId' 
     AND (
-      ('$proposedStartDateTime' BETWEEN startDateTime AND endDateTime)
-      OR ('$proposedEndDateTime' BETWEEN startDateTime AND endDateTime)
-      OR (startDateTime BETWEEN '$proposedStartDateTime' AND '$proposedEndDateTime')
-      OR (endDateTime BETWEEN '$proposedStartDateTime' AND '$proposedEndDateTime')
+      ('$dateTimeObject' BETWEEN startDateTime AND endDateTime)
+      OR ('$dateTimeObjectDrop' BETWEEN startDateTime AND endDateTime)
+      OR (startDateTime BETWEEN '$dateTimeObject' AND '$dateTimeObjectDrop')
+      OR (endDateTime BETWEEN '$dateTimeObject' AND '$dateTimeObjectDrop')
     )";
 
             $resultAppointment = $conn->query($sql);
 
-
             if ($resultAppointment->num_rows > 0) {
                 $rowApp = $result->fetch_assoc();
-                echo "Overlapping appointment exists. Cannot create a new appointment.";
+                echo '<script>alert("Overlapping appointment exists. Cannot create a new appointment.");</script>';
             } else {
 
-
                 $startTime = new DateTime($dateTimeObject);
-                $endTime = new DateTime($proposedEndDateTime);
+                $endTime = new DateTime($dateTimeObjectDrop);
 
                 // Calculate the difference in hours
                 $interval = $startTime->diff($endTime);
@@ -106,7 +89,7 @@
 
                 // $userId = $_SESSION['userId'];
                 $sql = "INSERT INTO appointments (renterId, status, carId, startDateTime, endDateTime, amount)
-                VALUES ('$userId', 'PENDING', '$carId', '$dateTimeObject', '$proposedEndDateTime', '$amount')";
+                VALUES ('$userId', 'PENDING', '$carId', '$dateTimeObject', '$dateTimeObjectDrop', '$amount')";
                 $appointmentMade = $conn->query($sql);
 
 

@@ -46,8 +46,10 @@
 
             if ($_POST['userType'] == "carRenter") {
                 $userType = "User";
-            } else {
+            } else if ($_POST['userType'] == "carOwner") {
                 $userType = "Renter";
+            } else {
+                $userType = "Admin";
             }
 
             $sql = "INSERT INTO userinfo (fName, lName, email, phoneNumber, city, postCode, password, userType) VALUES ('$fName', '$lName', '$email',
@@ -103,6 +105,12 @@
                                                 </label>
                                                 <input class="form-check-input" type="radio" id="exampleRadios2" value="carOwner" name="userType">
 
+                                            </div>
+                                            <div class="form-check">
+                                                <label class="form-check-label" for="exampleRadios2">
+                                                    Admin
+                                                </label>
+                                                <input class="form-check-input" type="radio" id="exampleRadios2" value="admin" name="userType">
                                             </div>
 
 

@@ -55,10 +55,8 @@
 
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["pickUpDate"])) {
 
-            // Retrieve available cars
             $pickUpTime = $_POST["pickUpDate"] . " " . $_POST["pickUpTime"];
             $dropOffTime = $_POST["dropOffDate"] . " " . $_POST["dropOffTime"];
-            // $dropOffTime = $_POST["dropOffTime"];
             $sql = "SELECT
             vt.id,
             vt.model,
