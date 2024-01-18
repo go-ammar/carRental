@@ -98,31 +98,25 @@
 
             // Display the list of users
             while ($row = $result->fetch_assoc()) {
-                echo '                                <tr class ="text-center">';
-                echo '                                    <td  class ="py-3">' . $row['fName'] . " " . $row['lName'] . '</a></td>';
-                echo '                                    <td class ="py-3">' . $row['numberOfCars'] . '</td>'; // Assuming 'numberOfCars' is a field in your database
-                echo '                                    <td class ="py-3">' . $row['numberOfBookings'] . '</td>'; // Assuming 'numberOfCars' is a field in your database
-                echo '                                    <td class="py-3">';
-                echo '                                        <span';
+                echo '<tr class ="text-center">';
+                echo '<td  class ="py-3">' . $row['fName'] . " " . $row['lName'] . '</a></td>';
+                echo '<td class ="py-3">' . $row['numberOfCars'] . '</td>';
+                echo '<td class ="py-3">' . $row['numberOfBookings'] . '</td>';
+                echo '<td class="py-3">';
+                echo '<span';
 
                 // Check if avgAmount is greater than overallAvg
                 if ($row['avgAmount'] >= $row['overallAvg']) {
-                    echo ' class="custom-teal text-dark rounded-pill py-2 px-3"'; // Add dark text and rounded corners class
+                    echo ' class="custom-teal text-dark rounded-pill py-2 px-3"';
                 } elseif ($row['avgAmount'] >= 0.8 * $row['overallAvg']) {
-                    echo ' class="bg-warning text-dark rounded-pill py-2 px-3"'; // Add a warning background, dark text, and rounded corners class
+                    echo ' class="bg-warning text-dark rounded-pill py-2 px-3"';
                 } else {
-                    echo ' class="bg-danger text-dark rounded-pill py-2 px-3"'; // Add a danger background, dark text, and rounded corners class
+                    echo ' class="bg-danger text-dark rounded-pill py-2 px-3"';
                 }
-
                 echo '>' . number_format($row['avgAmount'], 2) . '</span></td>';
-                echo '                                    <td class ="py-3">' . number_format($row['totalAmount'], 2) . '</td>'; // Assuming 'amountEarned' is a field in your database
-                echo '                                    <td class ="py-3"><a href="userDetails.php?userId=' . $row['id'] . '">View Details</a></td>';
-                echo '                                </tr>';
-
-                // Check if it's not the last row
-                // if (++$rowCount !== $totalRows) {
-                //     echo '                                <tr class="spacer"><td colspan="5"></td></tr>'; // Add a spacer row
-                // }
+                echo '<td class ="py-3">' . number_format($row['totalAmount'], 2) . '</td>';
+                echo '<td class ="py-3"><a href="userDetails.php?userId=' . $row['id'] . '">View Details</a></td>';
+                echo '</tr>';
             }
 
             echo '                                </tbody>';

@@ -43,8 +43,7 @@
     <section class="bg-dark card_signup rounded mx-auto p-5 with-margin-top">
         <div class="container card card-registration  mx-auto p-4">
             <h2 class="text-center">Terms and Conditions</h2>
-            <br>
-            <div class="row">
+            <div class="row px-4 py-3">
                 <br>
                 <p>Please read these terms and conditions carefully before using our car rental services.</p>
                 <p>By accessing or using our services, you agree to comply with and be bound by these terms. If you do not

@@ -32,7 +32,7 @@ if (isset($_GET['logout'])) {
                 <a class="nav-link active" href="ourClients.php">Our Clients</a>
                 <a class="nav-link active" href="blogs.php">Blogs</a>
                 <a class="nav-link active" href="?logout=true">Sign Out</a>
-                <a class="nav-link active" href="#">User</a>
+                <!-- <a class="nav-link active" href="#">User</a> -->
             </div>
         </div>
     </div>

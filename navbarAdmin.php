@@ -30,10 +30,11 @@ if (isset($_GET['logout'])) {
                 <a class="nav-link active" href="dashboardAdmin.php">Home</a>
                 <a class="nav-link active" href="vehicleListing.php">Vehicle List</a>
                 <a class="nav-link active" href="adminAddUser.php">Add User</a>
+                <a class="nav-link active" href="carRatingListAdmin.php">Car Ratings</a>
                 <a class="nav-link active" href="addNewCarMakeAdmin.php">Add Make</a>
                 <a class="nav-link active" href="bookingListAdmin.php">Bookings</a>
                 <a class="nav-link active" href="?logout=true">Sign Out</a>
-                <a class="nav-link active" href="#">Admin</a>
+                <!-- <a class="nav-link active" href="#">Admin</a> -->
             </div>
         </div>
     </div>

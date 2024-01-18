@@ -78,23 +78,14 @@
 
                 $startTime = new DateTime($dateTimeObject);
                 $endTime = new DateTime($dateTimeObjectDrop);
-
                 // Calculate the difference in hours
                 $interval = $startTime->diff($endTime);
                 $totalHours = $interval->days * 24 + $interval->h + ($interval->i / 60);
-
                 // Calculate the amount based on the total hours and hourly rate
                 $amount = $totalHours * $row['rate'];
-
-
-                // $userId = $_SESSION['userId'];
                 $sql = "INSERT INTO appointments (renterId, status, carId, startDateTime, endDateTime, amount)
                 VALUES ('$userId', 'PENDING', '$carId', '$dateTimeObject', '$dateTimeObjectDrop', '$amount')";
                 $appointmentMade = $conn->query($sql);
-
-
-                $param1 = 'value1';
-                $param2 = 'value2';
 
                 // Construct the URL with query parameters
                 $nextScreenUrl = 'terms.php?carId=' . urlencode($carId) . '&dateTimeObject=' . urlencode($dateTimeObject)

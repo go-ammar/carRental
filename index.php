@@ -54,7 +54,7 @@
             <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel" aria-describedby="carousel">
 
                 <div class="carousel-inner">
-                    <div class="carousel-item active" data-bs-interval="3000">
+                    <div class="carousel-item active">
                         <img src="assets/porsche.avif" class="d-block w-100 mw-25" alt="car image">
                     </div>
 
@@ -70,31 +70,31 @@
             </div>
 
             <section>
-                <div class="container mainSearchBox" aria-describedby="Seach car details">
+                <div class="container mainSearchBox" aria-label="Seach car details">
                     <div class="col">
                         <div class="card card-registration  mx-auto mx-0">
                             <div class="row">
                                 <div class="col">
                                     <div class="card-body p-md-5 text-black">
                                         <form class="row g-3" action="vehicleListing.php" method="post">
-                                            <div class="col-md-3" aria-describedby="pickup date input">
+                                            <div class="col-md-3" aria-label="pickup date input">
                                                 <label for="pickUpDate">Select Pick Up Date:</label>
                                                 <input type="date" class="form-control" id="pickUpDate" name="pickUpDate" required>
                                             </div>
-                                            <div class="col-md-3" aria-describedby="pickup time input">
+                                            <div class="col-md-3" aria-label="pickup time input">
                                                 <label for="pickUpTime">Select Pick Up Time:</label>
                                                 <input type="time" class="form-control" id="pickUpTime" name="pickUpTime" required>
                                             </div>
-                                            <div class="col-md-3" aria-describedby="dropoff date input">
+                                            <div class="col-md-3" aria-label="dropoff date input">
                                                 <label for="dropOffDate">Select Drop Off Date:</label>
                                                 <input type="date" class="form-control" id="dropOffDate" name="dropOffDate" required>
                                             </div>
-                                            <div class="col-md-3" aria-describedby="dropoff time input">
+                                            <div class="col-md-3" aria-label="dropoff time input">
                                                 <label for="dropOffTime">Select Drop Off Time:</label>
                                                 <input type="time" class="form-control" id="dropOffTime" name="dropOffTime" required>
                                             </div>
                                             <div class="col-12">
-                                                <button class="btn btn-primary" type="submit" aria-describedby="Search button">Search</button>
+                                                <button class="btn btn-primary" type="submit" aria-label="Search button">Search</button>
                                             </div>
                                         </form>
                                     </div>

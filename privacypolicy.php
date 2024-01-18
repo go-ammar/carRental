@@ -43,8 +43,7 @@
     <section class="bg-dark card_signup rounded mx-auto p-5 with-margin-top">
         <div class="container card card-registration  mx-auto p-4">
             <h2 class="text-center">Privacy Policy</h2>
-            <br>
-            <div class="row">
+            <div class="row px-4 py-3">
                 <p>This Privacy Policy describes how CarVoyage Rentals collects, uses, and discloses personal information when you use our car rental services and website.</p>
 
                 <h3>Information We Collect</h3>
@@ -80,7 +79,7 @@
                 <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page.</p>
 
                 <h3>Contact Us</h3>
-                <p>If you have any questions or concerns about our Privacy Policy, please contact us at [your contact information].</p>
+                <p>If you have any questions or concerns about our Privacy Policy, please contact us at (123) 456-7890.</p>
             </div>
         </div>
     </section>
